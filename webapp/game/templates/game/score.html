@@ -1,0 +1,39 @@
+{% extends 'game/base.html' %}
+
+{% load static %}
+
+{% block content %}
+    <input type=hidden id="user_real_name" value="{{first_name}} {{last_name}}"></input>
+    <input type=hidden id="user_account_name" value="{{username}}"></input>
+
+    <div class="col-sm-offset-5 col-sm-2">
+        <img class="img-responsive board_head" src="{% static 'game/ranking.png' %}" alt="Scoreboard">
+    </div>
+
+    <div class="col-lg-offset-1 col-lg-10">
+        <table id="id_score_table" class="table table-hover">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>User</th>
+                    <th>Score</th>
+                    <th>Win</th>
+                    <th>Lost</th>
+                </tr>
+            </thead>
+            <tbody id="scoreboard-list">
+            </tbody>
+        </table>
+    </div>
+    <div id="score-display">
+    </div>
+
+    <script>
+        window.onload = function () {
+            setTimeout(function () {
+                refreshScore();
+            }, 200)
+        }
+		window.setInterval(refreshScore, 5000);
+    </script>
+{% endblock %}

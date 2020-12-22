@@ -1,0 +1,106 @@
+{% extends 'game/base.html' %}
+
+{% load static %}
+
+{% block head %}
+    <script src = {% static 'game/gameLobbySocket.js'%} type="text/javascript"></script>
+{% endblock %}
+
+
+
+{% block content %}
+    <!-- store some not private variables for convenience-->
+    <input type=hidden id="user_real_name" value="{{first_name}} {{last_name}}">
+    <input type=hidden id="id_user_name" value="{{ username }}">
+
+    <div class="col-lg-8">
+        <div class="form-inline">
+            <div class="col-sm-offset-1 col-sm-5">
+                <label for="roomName">Name:</label>
+                <input type="roomName" class="form-control" id="room-enter-name" placeholder="Enter room name">
+            </div>
+            <div class="col-sm-2">
+                <button class="btn btn-info" id="room-enter-btn" onclick="enterGameRoom()">Add Room</button>
+            </div>
+            <div class="col-sm-2">
+                <button class="btn btn-warning" data-toggle="modal" data-target="#invite-modal">
+                    Invitation&nbsp;<span id="invitation-badge" class="badge">0</span>
+                </button>
+            </div>
+
+            <div class="modal fade" id="invite-modal" role="dialog">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button class="close" data-dismiss="modal">&times;</button>
+                            <h4 class="modal-title">Invitations</h4>
+                        </div>
+                        <div id="id_invite_list" class="modal-body">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    <div id="invitation-list">
+
+    </div>
+
+        <p4 id="id_add_room_err" class="col-sm-offset-3"></p4>
+
+        <div class="col-sm-offset-1 col-sm-10">
+            <table id="id_room_table" class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Name</th>
+                        <th>Host</th>
+                        <th>Players</th>
+                    </tr>
+                </thead>
+                <tbody id="game-room-list">
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+
+
+    <div id = "id_chat_container" class="col-lg-offset-1 col-lg-3">
+        <div class="well well-lg" id="chat-log">
+        </div>
+        <div class="input-group">
+            <input class="form-control" id="chat-message-input" type="text" size="100"><br>
+            <div class="input-group-btn">
+                <button class="btn btn-default" id="chat-message-submit" onclick="sendChatMessageClick()">
+                    <i class="glyphicon glyphicon-edit"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        PROFILE_URL = '{% url 'profile' 'dummy' %}';
+
+        window.onload = function() {
+            setTimeout(function () {
+                refreshGameRoom();
+            }, 1000)
+        }
+		window.setInterval(function () {
+            refreshGameRoom();
+        }, 4000);
+        window.setInterval(function () {
+            getInvitation();
+        }, 2000);
+
+
+        document.querySelector('#chat-message-input').onkeyup = function (e) {
+            if (e.keyCode === 13) {  // enter, return
+                document.querySelector('#chat-message-submit').click();
+            }
+        };
+
+
+    </script>
+
+{% endblock %}

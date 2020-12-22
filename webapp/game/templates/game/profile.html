@@ -1,0 +1,99 @@
+{% extends 'game/base.html' %}
+
+
+{% block content %}
+    <div id="id_img_col" class="col-lg-offset-2 col-lg-3">
+        <form enctype="multipart/form-data" class="form" id="id_profile_form" method="POST" action="{% url 'profile' username %}">
+            {% load static %}
+            <div id="id_image_upload" class="image_upload">
+                <label for="id_picture">
+                    Upload image
+                    <span class="glyphicon glyphicon-pencil"></span>
+                </label>
+                <input type="file" name="picture" id="id_picture" class="">
+            </div>
+            <p4 class="error">{{ form.errors }}</p4>
+            <p4 class="error">{{ form.non_field_errors }}</p4>
+            {% csrf_token %}
+        </form>
+        {% if pid != profile_pid%}
+            {% if friend %}
+                <form action="{% url 'profile' profile_user %}" method="POST">
+                    <button class="friendbtn btn btn-warning" name="unfollow" type="submit">Unfriend</button>
+                    {% csrf_token %}
+                </form>
+            {% else %}
+                <form action="{% url 'profile' profile_user %}" method="POST">
+                    <button class="friendbtn btn btn-warning" name="follow" type="submit">Friend</button>
+                    {% csrf_token %}
+                </form>
+            {% endif %}
+        {% endif %}
+    </div>
+    <div class="col-lg-6">
+
+        <div class="form-horizontal">
+            <div id="id_user" class="form-group">
+                <h2 class="col-sm-offset-1 col-sm-3 text-left">{{ profile_user }}
+                    {% if gender == "MALE" %}
+                        <img class="profile_gender" src="{% static 'game/male.png' %}">
+                    {% else %}
+                        <img class="profile_gender" src="{% static 'game/female.png' %}">
+                    {% endif %}
+                </h2>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-sm-2" for="id_profile_Score">Score: </label>
+                <div class="col-sm-4">
+                    <p id="id_profile_Score" class="form-control-static text-left">{{ score }}</p>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-sm-2" for="id_profile_Win">Win: </label>
+                <div class="col-sm-4">
+                    <p id="id_profile_Win" class="form-control-static text-left">{{ win }}</p>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-sm-2" for="id_profile_Lost">Lose: </label>
+                <div class="col-sm-4">
+                    <p id="id_profile_Lost" class="form-control-static text-left">{{ lose }}</p>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-sm-2" for="id_profile_bio">Bio: </label>
+                <div class="input-group col-sm-4">
+                    <textarea class="form-control" id="id_profile_bio" rows="3"
+                        form="id_profile_form" name="bio"
+                    >{{ bio }}</textarea>
+                    <span id="id_bio_submit" class="input-group-addon btn btn-default" onclick="submitForm()">
+                        <i class="glyphicon glyphicon-pencil"></i>
+                    </span>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <script>
+        if ({{ pid }} != {{ profile_pid }}) {
+            $("#id_image_upload").hide()
+            $("#id_bio_submit").hide()
+            $("#id_profile_bio").prop("readonly", true)
+            setTimeout(function () {
+                $("#id_profile_form").prepend(
+                    "<img id=\"id_user_picture\" src=\"{% url 'photo' profile_pid %}\" class=\"img-circle\" alt=\"Change profile image\">"
+                )
+            })
+        } else {
+            $("#id_profile_form").prepend(
+                    "<img id=\"id_user_picture\" src=\"{% url 'photo' pid %}\" class=\"img-circle\" alt=\"Change profile image\">"
+                )
+        }
+        document.getElementById("id_picture").onchange = function () {
+            submitForm()
+        }
+        function submitForm() {
+            $("#id_profile_form").submit()
+        }
+    </script>
+{% endblock %}

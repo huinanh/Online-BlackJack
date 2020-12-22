@@ -1,0 +1,21 @@
+{% extends 'game/base.html' %}
+
+{% block page-links %}
+{% endblock %}
+
+{% block content %}
+    <p>Log in to your account</p>
+    <form method="POST" action="{% url 'login' %}">
+            <p4 class="error">{{ form.non_field_errors }}</p4>
+            {% for field in form.visible_fields %}
+                <div class="form-group">
+                    {{field.label_tag}}
+                    {{field}}
+                </div>
+            {% endfor %}
+        <p4>Not register yet? <a id="id_register_link" href="{% url 'register' %}">Register</a></p4>
+        <br>
+        <button class="btn btn-info" id="id_login_button" type="submit">Login</button>
+    {% csrf_token %}
+    </form>
+{% endblock %}
