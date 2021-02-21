@@ -1,7 +1,7 @@
-# team35
+# Online BlackJack
 
 ## URL
-* http://3.15.162.52
+* http://3.83.251.166
 
 ## Requirements
 * ```channels==3.0.1```
