@@ -28,9 +28,9 @@ KEY_CONFIG.read(os.path.join(BASE_DIR, "config.ini"))
 SECRET_KEY = KEY_CONFIG.get('Django', "secret")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = ['3.15.162.52']
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
